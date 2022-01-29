@@ -11,6 +11,8 @@ public class PlayerAiming : MonoBehaviour
     public float aimReduceSpeed = 5f;
 
     public Camera cam;
+
+    public GameObject bullet;
     // Update is called once per frame
     void Update()
     {
@@ -20,7 +22,7 @@ public class PlayerAiming : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            Shoot();
+            Shoot(10);
         }
     }
 
@@ -35,7 +37,7 @@ public class PlayerAiming : MonoBehaviour
         currAimSize += amount;
     }
 
-    public void Shoot()
+    public void Shoot(float effectiveRange)
     {
         RaycastHit hit;
         RaycastHit hit2;
@@ -44,26 +46,41 @@ public class PlayerAiming : MonoBehaviour
         Vector3 camMiddle = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
 
         Ray randomPoint = shootRandomiser.instance.getRandomShoot();
+        Vector3 randomPointVec = randomPoint.origin;
+
 
         //Gdzie gracz chcial celowac (perfect shoot)
         Debug.DrawRay(camMiddle, cam.transform.forward * 30, Color.green, 10f, true);
 
-        Debug.Log("camMiddle"+camMiddle);
-        Debug.Log("randomPointCam"+randomPoint);
-
         //Strzal bezposrednio z wylosowanego punktu
         // if hit the shoot from middle to hit
+
+            
+        Debug.DrawRay(randomPoint.origin, randomPoint.direction * effectiveRange, Color.red, 10f, true);
+
+        Vector3 randomPointTarget = (randomPoint.direction) * effectiveRange + randomPoint.origin;
+
+        SpawnBullet(randomPointTarget);
+
         if (Physics.Raycast(randomPoint, out hit))
         {
 
-            Debug.DrawRay(randomPoint.origin, randomPoint.direction * 50, Color.red, 10f, true);
+            //Debug.DrawRay(randomPoint.origin, randomPoint.direction * effectiveRange, Color.yellow, 10f, true);
             Ray ray2 = new Ray(camMiddle, hit.point - camMiddle);
 
             if (Physics.Raycast(ray2, out hit2))
             {
-                Debug.DrawRay(camMiddle, hit2.point - camMiddle, Color.blue, 10f, true);
+                //Debug.DrawRay(camMiddle, hit2.point - camMiddle, Color.blue, 10f, true);
             }
             Transform objectHit = hit.transform;
         }
+    }
+
+    private void SpawnBullet(Vector3 target)
+    {
+        GameObject go = Instantiate(bullet);
+        go.transform.position = Camera.main.transform.position;
+        go.GetComponent<Bullet>().setDestination(target);
+        go.GetComponent<Bullet>().setSpeed(1);
     }
 }
