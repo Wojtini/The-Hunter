@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 867f8277985a1e644902905a3de85cb9, type: 3}
   m_Name: HighVelocityPistol
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: Test
   description: 
   logo: {fileID: 0}
   gameObjectRepresentation: {fileID: 0}
