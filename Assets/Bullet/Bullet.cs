@@ -8,11 +8,6 @@ public class Bullet : MonoBehaviour
     public float speed = 60;
 
     public GameObject pS;
-    // Start is called before the first frame update
-    void Start()
-    {
-        //enabled = false;
-    }
 
     // Update is called once per frame
     void Update()
@@ -27,9 +22,9 @@ public class Bullet : MonoBehaviour
         enabled = true;
     }
 
-    public void setSpeed(float speed)
+    public void setStatistics(Weapon weapon)
     {
-        this.speed = speed;
+        this.speed = weapon.bulletSpeed;
     }
 
     void OnCollisionEnter(Collision collision)

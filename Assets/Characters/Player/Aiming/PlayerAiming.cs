@@ -13,9 +13,11 @@ public class PlayerAiming : MonoBehaviour
     public Camera cam;
 
     public GameObject bullet;
+    public PlayerEquipment playerEquipment;
     // Update is called once per frame
     void Update()
     {
+        playerEquipment = GetComponent<PlayerEquipment>();
         cam = this.GetComponentInChildren<Camera>();
         reduceAimSize(Time.deltaTime);
         Crosshair.instance.setCurrentRadius(currAimSize);
@@ -81,6 +83,6 @@ public class PlayerAiming : MonoBehaviour
         GameObject go = Instantiate(bullet);
         go.transform.position = Camera.main.transform.position;
         go.GetComponent<Bullet>().setDestination(target);
-        go.GetComponent<Bullet>().setSpeed(1);
+        go.GetComponent<Bullet>().setStatistics(playerEquipment.firstWeapon);
     }
 }
