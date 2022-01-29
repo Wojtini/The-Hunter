@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class Damagable : MonoBehaviour
 {
-    public int currHealth = 0;
+    public int currHealth = 1;
     public int maxHealth = 1;
 
     public GameObject hitNotifaction;
-    public void Update()
+    public void damage(int damage)
     {
+        //Object.Instantiate(this.hitNotifaction, this.transform);
+        currHealth -= damage;
         if (currHealth <= 0)
         {
             Die();
         }
-    }
-    public void hit(int damage)
-    {
-        Object.Instantiate(this.hitNotifaction, this.transform);
     }
 
     public void heal(int amount)
@@ -28,6 +26,6 @@ public class Damagable : MonoBehaviour
     virtual public void Die()
     {
         Debug.Log(this + " died");
-        //zniszcz obiekt
+        Destroy(this.gameObject);
     }
 }
