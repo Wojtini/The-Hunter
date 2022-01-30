@@ -7,6 +7,7 @@ public class Weapon : Item
 {
     public int minDamage;
     public int maxDamage;
-    public int effectiveRange;
-    public int bulletSpeed;
+    public float effectiveRange;
+    public float bulletSpeed;
+    public float aimDispersionAfterShot;
 }

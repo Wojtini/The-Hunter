@@ -15,17 +15,21 @@ public class PlayerAiming : MonoBehaviour
     public GameObject bullet;
     public PlayerEquipment playerEquipment;
     // Update is called once per frame
-    void Update()
+    private void Start()
     {
         playerEquipment = GetComponent<PlayerEquipment>();
         cam = this.GetComponentInChildren<Camera>();
+    }
+    void Update()
+    {
         reduceAimSize(Time.deltaTime);
-        Crosshair.instance.setCurrentRadius(currAimSize);
 
         if (Input.GetButtonDown("Fire1"))
         {
-            Shoot(10);
+            Shoot(playerEquipment.firstWeapon);
         }
+
+        Crosshair.instance.setCurrentRadius(currAimSize);
     }
 
     void reduceAimSize(float time)
@@ -39,7 +43,16 @@ public class PlayerAiming : MonoBehaviour
         currAimSize += amount;
     }
 
-    public void Shoot(float effectiveRange)
+    public void Shoot(Weapon weapon)
+    {
+        Vector3 target = CalculateTarget(weapon.effectiveRange);
+
+        modifyAimSize(weapon.aimDispersionAfterShot);
+
+        SpawnBullet(target);
+    }
+
+    private Vector3 CalculateTarget(float effectiveRange)
     {
 
         Vector3 camMiddle = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
@@ -47,12 +60,12 @@ public class PlayerAiming : MonoBehaviour
         Ray randomPoint = shootRandomiser.instance.getRandomShoot();
         Vector3 randomPointVec = randomPoint.origin;
         Debug.DrawRay(camMiddle, cam.transform.forward * 30, Color.green, 10f, true);
-            
+
         Debug.DrawRay(randomPoint.origin, randomPoint.direction * effectiveRange, Color.red, 10f, true);
 
         Vector3 randomPointTarget = (randomPoint.direction) * effectiveRange + randomPoint.origin;
 
-        SpawnBullet(randomPointTarget);
+        return randomPointTarget;
     }
 
     private void SpawnBullet(Vector3 target)

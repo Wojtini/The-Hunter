@@ -2140,7 +2140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minAimSize: 10
   currAimSize: 50
-  maxAimSize: 100
+  maxAimSize: 500
   aimReduceSpeed: 120
   cam: {fileID: 0}
   bullet: {fileID: 2462097982286106474, guid: 65256b8c4e81ab34781ccf4b9a470edf, type: 3}

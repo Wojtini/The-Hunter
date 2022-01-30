@@ -20,3 +20,4 @@ MonoBehaviour:
   maxDamage: 0
   effectiveRange: 0
   bulletSpeed: 1
+  aimDispersionAfterShot: 10
