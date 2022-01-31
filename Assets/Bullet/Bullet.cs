@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     public Vector3 destination;
     public float speed = 60;
     public int damage = 1;
+    public DamageTypes damageType;
 
     public GameObject pS;
 
@@ -27,6 +28,7 @@ public class Bullet : MonoBehaviour
     {
         this.speed = weapon.bulletSpeed;
         this.damage = Random.Range(weapon.minDamage, weapon.maxDamage);
+        this.damageType = weapon.damageType;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -35,7 +37,7 @@ public class Bullet : MonoBehaviour
         Damagable hit = collision.gameObject.GetComponent<Damagable>();
         if (hit)
         {
-            hit.damage(damage);
+            hit.damage(this.damage,this.damageType);
         }
 
         Destroy(this.gameObject);

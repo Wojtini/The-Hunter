@@ -11,4 +11,5 @@ public class Weapon : Item
     public float bulletSpeed;
     public float aimDispersionAfterShot;
     public float aimReduceSpeed;
+    public DamageTypes damageType;
 }

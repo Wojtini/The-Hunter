@@ -16,9 +16,10 @@ MonoBehaviour:
   description: 
   logo: {fileID: 0}
   gameObjectRepresentation: {fileID: 0}
-  minDamage: 1
-  maxDamage: 10
+  minDamage: 5
+  maxDamage: 5
   effectiveRange: 0
   bulletSpeed: 10
   aimDispersionAfterShot: 10
-  aimReduceSpeed: 250
+  aimReduceSpeed: 100
+  damageType: 0
