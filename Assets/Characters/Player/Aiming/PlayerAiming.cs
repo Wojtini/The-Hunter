@@ -8,8 +8,6 @@ public class PlayerAiming : MonoBehaviour
     public float currAimSize = 50f;
     public float maxAimSize = 100f;
 
-    public float aimReduceSpeed = 5f;
-
     public Camera cam;
 
     public GameObject bullet;
@@ -34,8 +32,13 @@ public class PlayerAiming : MonoBehaviour
 
     void reduceAimSize(float time)
     {
-        currAimSize = currAimSize - aimReduceSpeed * time;
+        currAimSize = currAimSize - playerEquipment.firstWeapon.aimReduceSpeed * time;
         currAimSize = Mathf.Clamp(currAimSize, minAimSize, maxAimSize);
+    }
+
+    public void doMaxAimSize()
+    {
+        currAimSize = maxAimSize;
     }
 
     public void modifyAimSize(float amount)
@@ -71,7 +74,7 @@ public class PlayerAiming : MonoBehaviour
     private void SpawnBullet(Vector3 target)
     {
         GameObject go = Instantiate(bullet);
-        go.transform.position = Camera.main.transform.position;
+        go.transform.position = Camera.main.transform.position; 
         go.GetComponent<Bullet>().setDestination(target);
         go.GetComponent<Bullet>().setStatistics(playerEquipment.firstWeapon);
     }

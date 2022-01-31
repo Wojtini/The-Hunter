@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destination: {x: 0, y: 0, z: 0}
   speed: 60
+  damage: 1
   pS: {fileID: 6021061904403777340, guid: 5e10f83f56aa19c488e0c8530e53cbf1, type: 3}
 --- !u!96 &8044883750246292872
 TrailRenderer:

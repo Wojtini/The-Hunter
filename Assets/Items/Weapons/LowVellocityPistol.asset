@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 867f8277985a1e644902905a3de85cb9, type: 3}
   m_Name: LowVellocityPistol
   m_EditorClassIdentifier: 
-  itemName: Test
+  itemName: Matke tez
   description: 
   logo: {fileID: 0}
   gameObjectRepresentation: {fileID: 0}
-  minDamage: 0
-  maxDamage: 0
+  minDamage: 1
+  maxDamage: 10
   effectiveRange: 0
-  bulletSpeed: 1
+  bulletSpeed: 10
   aimDispersionAfterShot: 10
+  aimReduceSpeed: 250

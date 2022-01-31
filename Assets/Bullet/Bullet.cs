@@ -26,6 +26,7 @@ public class Bullet : MonoBehaviour
     public void setStatistics(Weapon weapon)
     {
         this.speed = weapon.bulletSpeed;
+        this.damage = Random.Range(weapon.minDamage, weapon.maxDamage);
     }
 
     void OnCollisionEnter(Collision collision)

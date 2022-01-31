@@ -10,4 +10,5 @@ public class Weapon : Item
     public float effectiveRange;
     public float bulletSpeed;
     public float aimDispersionAfterShot;
+    public float aimReduceSpeed;
 }
