@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : Damagable
+public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent agent;
     public GameObject player;

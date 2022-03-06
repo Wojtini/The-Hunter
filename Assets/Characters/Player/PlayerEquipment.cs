@@ -25,6 +25,9 @@ public class PlayerEquipment : MonoBehaviour
         Weapon temp = firstWeapon;
         firstWeapon = secondWeapon;
         secondWeapon = temp;
+
+        UIManager.instance.UpdateWeaponPanel(firstWeapon, secondWeapon);
+
         playerAiming.doMaxAimSize();
     }
 }

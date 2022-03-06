@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Damagable : MonoBehaviour
 {
@@ -13,9 +14,14 @@ public class Damagable : MonoBehaviour
 
 
     public GameObject hitNotifaction;
+
+    public Slider healthBar;
+    public Slider armorBar;
     public void damage(int damage, DamageTypes damageType)
     {
-        //Object.Instantiate(this.hitNotifaction, this.transform);
+        GameObject hitNotification = Instantiate(this.hitNotifaction);
+        hitNotification.transform.position = this.transform.position + Vector3.up;
+        hitNotifaction.GetComponent<DmgPupUp>().setText(damage.ToString());
 
         damage = dealDamageToArmor(damage, damageType);
 
@@ -27,6 +33,14 @@ public class Damagable : MonoBehaviour
                 Die();
             }
         }
+
+        if(!healthBar || !armorBar)
+        {
+            return;
+        }
+
+        healthBar.value = (float)currHealth / maxHealth;
+        armorBar.value = (float)currArmor / maxArmor;
     }
 
     private int dealDamageToArmor(int damage, DamageTypes damageType)

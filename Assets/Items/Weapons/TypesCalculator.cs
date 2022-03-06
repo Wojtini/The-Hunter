@@ -67,4 +67,5 @@ public static class TypesCalculator
         }
         return 100.0f;
     }
+
 }

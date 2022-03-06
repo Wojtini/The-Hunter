@@ -24,13 +24,12 @@ public class PlayerCharacterController : MonoBehaviour
 
     public bool canMove = true;
     public bool isCrouching = false;
+
+    public bool canRotateCamera = true;
     void Start()
     {
         playerAiming = GetComponent<PlayerAiming>();
         characterController = GetComponent<CharacterController>();
-        // Lock cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()
@@ -64,7 +63,6 @@ public class PlayerCharacterController : MonoBehaviour
             moveDirection.y = yDir;
         }
 
-        HandlePlayerJump();
         //dispersion Calculation
         //float pom2 = characterController.isGrounded ? 0 : 1;
         //float pom = Mathf.Clamp(Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Horizontal")),0,1) + pom2;
@@ -87,14 +85,32 @@ public class PlayerCharacterController : MonoBehaviour
         characterController.Move(moveDirection * Time.deltaTime);
 
 
+        if (canRotateCamera)
+        {
+            handleLooking();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            canRotateCamera = !canRotateCamera;
+            if (canRotateCamera)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
+        }
+
+    }
+
+    private void handleLooking()
+    {
         rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
         rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
-
-    }
-
-    private void HandlePlayerJump()
-    {
     }
 }
