@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Crosshair : MonoBehaviour
 {
     public float currentRadius = 50f;
 
     public GameObject[] indicators;
+
 
     public static Crosshair instance;
     void Start()

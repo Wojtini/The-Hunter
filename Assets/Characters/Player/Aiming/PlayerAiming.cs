@@ -2,43 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAiming : MonoBehaviour
+public class PlayerAiming : CharacterAiming
 {
-    public float minAimSize = 5f;
     public float currAimSize = 50f;
-    public float maxAimSize = 100f;
-
     public Camera cam;
 
-    public GameObject bullet;
-    public PlayerEquipment playerEquipment;
     // Update is called once per frame
-    private void Start()
+    override public void Start()
     {
-        playerEquipment = GetComponent<PlayerEquipment>();
+        base.Start();
         cam = this.GetComponentInChildren<Camera>();
     }
     void Update()
     {
         reduceAimSize(Time.deltaTime);
 
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Shoot(playerEquipment.firstWeapon);
-        }
-
         Crosshair.instance.setCurrentRadius(currAimSize);
     }
 
     void reduceAimSize(float time)
     {
-        currAimSize = currAimSize - playerEquipment.firstWeapon.aimReduceSpeed * time;
-        currAimSize = Mathf.Clamp(currAimSize, minAimSize, maxAimSize);
-    }
+        float minimumDispersion = characterEquipment.firstWeapon.minimumDispersion;
+        float maximumDispersion = characterEquipment.firstWeapon.maximumDispersion;
+        Vector3 MinMaxPair = getDispersionModifiers();
+        minimumDispersion *= MinMaxPair.x;
+        maximumDispersion *= MinMaxPair.y;
+        float aimingSpeedModifier = MinMaxPair.z;
 
-    public void doMaxAimSize()
-    {
-        currAimSize = maxAimSize;
+
+        float step = characterEquipment.firstWeapon.maximumDispersion - characterEquipment.firstWeapon.minimumDispersion;
+        step /= characterEquipment.firstWeapon.fullAimTime * aimingSpeedModifier;
+        currAimSize = currAimSize - step * time;
+        currAimSize = Mathf.Clamp(currAimSize, minimumDispersion, maximumDispersion);
     }
 
     public void modifyAimSize(float amount)
@@ -49,10 +44,13 @@ public class PlayerAiming : MonoBehaviour
     public void Shoot(Weapon weapon)
     {
         Vector3 target = CalculateTarget(weapon.effectiveRange);
+        currAimSize += characterEquipment.firstWeapon.aimDispersionAfterShot;
+        base.Shoot(target);
+    }
 
-        modifyAimSize(weapon.aimDispersionAfterShot);
-
-        SpawnBullet(target);
+    public override Vector3 getBulletSpawnPos()
+    {
+        return Camera.main.transform.position;
     }
 
     private Vector3 CalculateTarget(float effectiveRange)
@@ -71,11 +69,11 @@ public class PlayerAiming : MonoBehaviour
         return randomPointTarget;
     }
 
-    private void SpawnBullet(Vector3 target)
+    override public GameObject SpawnBullet(Weapon weapon, Vector3 origin, Vector3 target)
     {
-        GameObject go = Instantiate(bullet);
-        go.transform.position = Camera.main.transform.position; 
-        go.GetComponent<Bullet>().setDestination(target);
-        go.GetComponent<Bullet>().setStatistics(playerEquipment.firstWeapon);
+        GameObject go = base.SpawnBullet(weapon, origin, target);
+        go.GetComponent<Bullet>().toggleLaser(false);
+
+        return go;
     }
 }

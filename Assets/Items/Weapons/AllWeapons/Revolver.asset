@@ -10,16 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 867f8277985a1e644902905a3de85cb9, type: 3}
-  m_Name: LowVellocityPistol
+  m_Name: Revolver
   m_EditorClassIdentifier: 
-  itemName: Matke tez
+  itemName: Revolver
   description: 
   logo: {fileID: 0}
   gameObjectRepresentation: {fileID: 0}
-  minDamage: 5
-  maxDamage: 5
-  effectiveRange: 0
-  bulletSpeed: 10
-  aimDispersionAfterShot: 10
-  aimReduceSpeed: 100
+  minDamage: 0
+  maxDamage: 0
+  clipSize: 0
+  bulletSpeed: 150
+  aimDispersionAfterShot: 200
+  minimumDispersion: 100
+  maximumDispersion: 500
+  fullAimTime: 3
+  effectiveRange: 100
   damageType: 0
+  shootSFX: {fileID: 8300000, guid: a1580e181876bed46a6839ab6337d718, type: 3}
+  bullet: {fileID: 2462097982286106474, guid: 65256b8c4e81ab34781ccf4b9a470edf, type: 3}

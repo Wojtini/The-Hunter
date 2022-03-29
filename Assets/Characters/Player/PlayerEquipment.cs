@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEquipment : MonoBehaviour
+public class PlayerEquipment : CharacterEquipment
 {
-    public Weapon firstWeapon;
-    public Weapon secondWeapon;
     private PlayerAiming playerAiming;
 
     void Start()
     {
         playerAiming = GetComponent<PlayerAiming>();    
     }
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -20,14 +18,8 @@ public class PlayerEquipment : MonoBehaviour
         }
     }
 
-    private void SwapWeapons()
+    override public void SwapWeapons()
     {
-        Weapon temp = firstWeapon;
-        firstWeapon = secondWeapon;
-        secondWeapon = temp;
-
-        UIManager.instance.UpdateWeaponPanel(firstWeapon, secondWeapon);
-
-        playerAiming.doMaxAimSize();
+        base.SwapWeapons();
     }
 }

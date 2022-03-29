@@ -7,9 +7,19 @@ public class Weapon : Item
 {
     public int minDamage;
     public int maxDamage;
-    public float effectiveRange;
+    public int clipSize;
     public float bulletSpeed;
+
     public float aimDispersionAfterShot;
-    public float aimReduceSpeed;
+    public float minimumDispersion;
+    public float maximumDispersion;
+    public float fullAimTime;
+    
+    public float effectiveRange;
+
     public DamageTypes damageType;
+
+    public AudioClip shootSFX;
+
+    public GameObject bullet;
 }
