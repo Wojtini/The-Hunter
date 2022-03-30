@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 public class ItemEntry : MonoBehaviour
 {
+    public Item item;
     public Text itemName;
     
     public void setItem(Item item)
     {
         itemName.text = item.itemName;
+        this.item = item;
     }
 }

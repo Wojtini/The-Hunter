@@ -43,9 +43,12 @@ public class PlayerAiming : CharacterAiming
 
     public void Shoot(Weapon weapon)
     {
+        if (characterEquipment.firstWeapon.currentClip <= 0)
+            return;
+        characterEquipment.firstWeapon.currentClip -= 1;
         Vector3 target = CalculateTarget(weapon.effectiveRange);
         currAimSize += characterEquipment.firstWeapon.aimDispersionAfterShot;
-        base.Shoot(target);
+        Shoot(target);
     }
 
     public override Vector3 getBulletSpawnPos()

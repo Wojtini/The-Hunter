@@ -8,25 +8,25 @@ public class InventoryUI : MonoBehaviour
 
     public GameObject itemEntry;
     public GameObject panel;
+    public static InventoryUI instance;
     // Update is called once per frame
     private void Start()
     {
+        instance = this;
         panel.gameObject.SetActive(false);
     }
-    void Update()
+    public void ToggleInventory()
     {
-        if (Input.GetKeyDown(KeyCode.Tab)){
-            panel.gameObject.SetActive(!panel.gameObject.activeSelf);
-            UpdateInventoryView();
-        }
+        panel.gameObject.SetActive(!panel.gameObject.activeSelf);
+        UpdateInventoryView();
     }
 
-    void UpdateInventoryView()
+    public void UpdateInventoryView()
     {
         DestroyAllChildren();
-        foreach(Item item in Inventory.instance.items)
+        foreach(Item item in Inventory.instance.getAllItems())
         {
-            ItemEntry entry = Instantiate(itemEntry, panel.transform).GetComponent<ItemEntry>();
+            ItemEntry entry = Instantiate(itemEntry, panel.transform).GetComponentInChildren<ItemEntry>();
             entry.setItem(item);
         }
     }

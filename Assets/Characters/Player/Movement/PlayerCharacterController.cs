@@ -17,10 +17,6 @@ public class PlayerCharacterController : MonoBehaviour
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
 
-    public float aimJumpDispersion = 35f;
-    public float walkDispersion = 1f;
-    public float runningDispersion = 5f;
-
     public PlayerAiming playerAiming;
 
     public AimingModifier walkingModifier;
@@ -66,7 +62,6 @@ public class PlayerCharacterController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && characterController.isGrounded)
         {
             moveDirection.y = jumpSpeed;
-            playerAiming.modifyAimSize(aimJumpDispersion);
         }
         else
         {
@@ -81,12 +76,6 @@ public class PlayerCharacterController : MonoBehaviour
 
         // Move the controller
         characterController.Move(moveDirection * Time.deltaTime);
-
-        //dispersion Calculation example
-        //float pom2 = characterController.isGrounded ? 0 : 1;
-        //float pom = Mathf.Clamp(Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Horizontal")),0,1) + pom2;
-        //pom = isRunning ? pom * runningDispersion : pom * walkDispersion;
-        //playerAiming.modifyAimSize(pom);
 
     }
 }

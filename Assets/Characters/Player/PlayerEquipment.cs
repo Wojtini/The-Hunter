@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PlayerEquipment : CharacterEquipment
 {
-    private PlayerAiming playerAiming;
+    public static PlayerEquipment instance;
 
-    void Start()
+    override protected void Start()
     {
-        playerAiming = GetComponent<PlayerAiming>();    
+        instance = this;
+        base.Start();
     }
     void Update()
     {

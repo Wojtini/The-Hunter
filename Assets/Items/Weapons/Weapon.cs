@@ -7,6 +7,7 @@ public class Weapon : Item
 {
     public int minDamage;
     public int maxDamage;
+    public int currentClip;
     public int clipSize;
     public float bulletSpeed;
 

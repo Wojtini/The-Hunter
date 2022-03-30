@@ -7,13 +7,13 @@ public class PlayerInputManager : MonoBehaviour
     public bool canMove = true;
     public bool canLookAround = true;
 
-    public PlayerAiming playerAiming;
-    public PlayerCharacterController characterController;
-    public PlayerEquipment playerEquipment;
+    private PlayerAiming playerAiming;
+    private PlayerCharacterController characterController;
+    private PlayerEquipment playerEquipment;
     // Start is called before the first frame update
     void Start()
     {
-        this.characterController = GetComponent<PlayerCharacterController>();
+        characterController = GetComponent<PlayerCharacterController>();
         playerAiming = GetComponent<PlayerAiming>();
         playerEquipment = GetComponent<PlayerEquipment>();
     }
@@ -25,6 +25,26 @@ public class PlayerInputManager : MonoBehaviour
         CharacterRotation();
         UIInput();
         Shooting();
+        Interactions();
+    }
+
+    Ray RayOrigin;
+    RaycastHit HitInfo;
+    void Interactions()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(RayOrigin, out HitInfo, 30f))
+            {
+                Interactable interactable = HitInfo.transform.gameObject.GetComponent<Interactable>();
+                if (interactable)
+                {
+                    Debug.Log("Interacted with " + interactable);
+                    interactable.Interact();
+                }
+            }
+        }
     }
 
     void Shooting()
@@ -32,6 +52,10 @@ public class PlayerInputManager : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             playerAiming.Shoot(playerEquipment.firstWeapon);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            playerEquipment.reloadWeapon();
         }
     }
 
@@ -41,16 +65,13 @@ public class PlayerInputManager : MonoBehaviour
         {
             canLookAround = !canLookAround;
             canMove = !canMove;
+            InventoryUI.instance.ToggleInventory();
+            
             if (canLookAround)
-            {
                 Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
             else
-            {
                 Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
-            }
+            Cursor.visible = !canLookAround;
         }
 
     }
