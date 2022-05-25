@@ -41,18 +41,16 @@ public class CharacterAiming : MonoBehaviour
         //go.GetComponent<Bullet>().toggleLaser(false);
     }
 
-    protected Vector3 getDispersionModifiers()
+    protected Vector2 getDispersionModifiers()
     {
-        float minimumDispersion = 1;
-        float maximumDispersion = 1;
-        float aimingSpeed = 1;
+        float dispersionModifier = 0;
+        float aimingSpeed = 0;
         List<AimingModifier> aimingModifiers = characterModifiers.getAimingModifiers();
         foreach (AimingModifier am in aimingModifiers)
         {
-            minimumDispersion *= am.minimumDispersionModifier;
-            maximumDispersion *= am.maximumDispersionModifier;
-            aimingSpeed *= am.aimingTimeModifier;
+            dispersionModifier += am.dispersionModifier;
+            aimingSpeed += am.aimingTimeModifier;
         }
-        return new Vector3(minimumDispersion, maximumDispersion, aimingSpeed);
+        return new Vector2(dispersionModifier, aimingSpeed);
     }
 }

@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class PlayerAiming : CharacterAiming
 {
-    public float currAimSize = 50f;
+    private float maximumDispersionRadius = 400f;
+    private float minimumDispersionRadius = 0f;
+    public float dispersion = 0.2f;
+    private const float WORSENING_MODIFIER = 1.5f; // To make worsening aim faster
     public Camera cam;
 
     // Update is called once per frame
@@ -17,28 +20,30 @@ public class PlayerAiming : CharacterAiming
     {
         reduceAimSize(Time.deltaTime);
 
-        Crosshair.instance.setCurrentRadius(currAimSize);
+        
     }
 
     void reduceAimSize(float time)
     {
-        float minimumDispersion = characterEquipment.firstWeapon.minimumDispersion;
-        float maximumDispersion = characterEquipment.firstWeapon.maximumDispersion;
-        Vector3 MinMaxPair = getDispersionModifiers();
-        minimumDispersion *= MinMaxPair.x;
-        maximumDispersion *= MinMaxPair.y;
-        float aimingSpeedModifier = MinMaxPair.z;
+        float weaponDispersion = characterEquipment.firstWeapon.dispersion; // minimum that can be achieved (without modifiers)
+        float aimTime = characterEquipment.firstWeapon.fullAimTime;
+        Vector2 modifiers = getDispersionModifiers();
+
+        float distDispersion = weaponDispersion + modifiers.x; // minimum that can be achieved with modifiers
+
+        dispersion = Mathf.Clamp(dispersion, 0f, 1f);
+        if(dispersion < distDispersion)
+        {
+            dispersion = Mathf.MoveTowards(dispersion, distDispersion, WORSENING_MODIFIER * Time.deltaTime);
+        }
+        else
+        {
+            dispersion = Mathf.MoveTowards(dispersion, distDispersion, 1 / aimTime * Time.deltaTime);
+        }
 
 
-        float step = characterEquipment.firstWeapon.maximumDispersion - characterEquipment.firstWeapon.minimumDispersion;
-        step /= characterEquipment.firstWeapon.fullAimTime * aimingSpeedModifier;
-        currAimSize = currAimSize - step * time;
-        currAimSize = Mathf.Clamp(currAimSize, minimumDispersion, maximumDispersion);
-    }
-
-    public void modifyAimSize(float amount)
-    {
-        currAimSize += amount;
+        float currAimRadius = Mathf.Lerp(this.minimumDispersionRadius, this.maximumDispersionRadius, dispersion);
+        Crosshair.instance.setCurrentRadius(currAimRadius);
     }
 
     public void Shoot(Weapon weapon)
@@ -47,7 +52,7 @@ public class PlayerAiming : CharacterAiming
             return;
         characterEquipment.firstWeapon.currentClip -= 1;
         Vector3 target = CalculateTarget(weapon.effectiveRange);
-        currAimSize += characterEquipment.firstWeapon.aimDispersionAfterShot;
+        dispersion += characterEquipment.firstWeapon.aimDispersionAfterShot;
         Shoot(target);
     }
 

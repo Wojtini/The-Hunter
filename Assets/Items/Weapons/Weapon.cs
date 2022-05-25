@@ -11,9 +11,8 @@ public class Weapon : Item
     public int clipSize;
     public float bulletSpeed;
 
+    public float dispersion;
     public float aimDispersionAfterShot;
-    public float minimumDispersion;
-    public float maximumDispersion;
     public float fullAimTime;
     
     public float effectiveRange;

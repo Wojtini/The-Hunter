@@ -3062,7 +3062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpawnPos: {fileID: 0}
-  currAimSize: 50
+  dispersion: 1
   cam: {fileID: 0}
 --- !u!114 &1104645629
 MonoBehaviour:

@@ -10,8 +10,7 @@ public class EnemyAiming : CharacterAiming
         GameObject go = base.SpawnBullet(weapon, origin, target);
 
         Vector2 MinMaxPair = getDispersionModifiers();
-        float averageFromPair = (MinMaxPair.x + MinMaxPair.y) / 2;
-        float range = dispersion * averageFromPair;
+        float range = dispersion * MinMaxPair.x / 2;
 
         float randomNumberX = Random.Range(-range, range);
         float randomNumberY = Random.Range(-range, range);

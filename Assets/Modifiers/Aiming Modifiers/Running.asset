@@ -22,5 +22,5 @@ MonoBehaviour:
   currentTime: 0
   stackable: 0
   stacks: 0
-  minimumDispersionModifier: 1.75
-  maximumDispersionModifier: 1
+  dispersionModifier: 0.2
+  aimingTimeModifier: 0.2

@@ -21,9 +21,8 @@ MonoBehaviour:
   currentClip: 5
   clipSize: 5
   bulletSpeed: 150
-  aimDispersionAfterShot: 200
-  minimumDispersion: 100
-  maximumDispersion: 500
+  dispersion: 0
+  aimDispersionAfterShot: 0.2
   fullAimTime: 3
   effectiveRange: 100
   damageType: 0
