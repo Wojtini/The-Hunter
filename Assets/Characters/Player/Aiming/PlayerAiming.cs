@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,8 @@ public class PlayerAiming : CharacterAiming
     private float maximumDispersionRadius = 400f;
     private float minimumDispersionRadius = 0f;
     public float dispersion = 0.2f;
-    private const float WORSENING_MODIFIER = 1.5f; // To make worsening aim faster
+    public float weaponSwapPenalty = 1f;
+    private const float WORSENING_MODIFIER = 1.1f; // To make worsening aim faster
     public Camera cam;
 
     // Update is called once per frame
@@ -23,6 +25,11 @@ public class PlayerAiming : CharacterAiming
         
     }
 
+    internal void weaponSwapped()
+    {
+        dispersion = weaponSwapPenalty;
+    }
+
     void reduceAimSize(float time)
     {
         float weaponDispersion = characterEquipment.firstWeapon.dispersion; // minimum that can be achieved (without modifiers)
@@ -34,7 +41,7 @@ public class PlayerAiming : CharacterAiming
         dispersion = Mathf.Clamp(dispersion, 0f, 1f);
         if(dispersion < distDispersion)
         {
-            dispersion = Mathf.MoveTowards(dispersion, distDispersion, WORSENING_MODIFIER * Time.deltaTime);
+            dispersion = Mathf.MoveTowards(dispersion, distDispersion, 1 / WORSENING_MODIFIER * Time.deltaTime);
         }
         else
         {
@@ -50,6 +57,9 @@ public class PlayerAiming : CharacterAiming
     {
         if (characterEquipment.firstWeapon.currentClip <= 0)
             return;
+        if (characterEquipment.isInAnimState("Reload"))
+            return;
+        characterEquipment.setAnimationTrigger("Fire");
         characterEquipment.firstWeapon.currentClip -= 1;
         Vector3 target = CalculateTarget(weapon.effectiveRange);
         dispersion += characterEquipment.firstWeapon.aimDispersionAfterShot;

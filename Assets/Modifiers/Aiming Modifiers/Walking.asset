@@ -23,4 +23,4 @@ MonoBehaviour:
   stackable: 0
   stacks: 0
   dispersionModifier: 0.2
-  aimingTimeModifier: 0.2
+  aimingTimeModifier: 0.01

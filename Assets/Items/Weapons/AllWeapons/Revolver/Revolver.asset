@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Revolver
   description: 
   logo: {fileID: 0}
-  gameObjectRepresentation: {fileID: 919132149155446097, guid: 01a60f71c6df1a0468f4accf4739ffdb, type: 3}
+  gameObjectRepresentation: {fileID: 494234399010850419, guid: 77e7661017a0b2c4ca2c9969b4ca12e9, type: 3}
   minDamage: 0
   maxDamage: 0
   currentClip: 5
@@ -23,7 +23,7 @@ MonoBehaviour:
   bulletSpeed: 150
   dispersion: 0
   aimDispersionAfterShot: 0.2
-  fullAimTime: 3
+  fullAimTime: 1.2
   effectiveRange: 100
   damageType: 0
   shootSFX: {fileID: 8300000, guid: a1580e181876bed46a6839ab6337d718, type: 3}

@@ -55,7 +55,9 @@ public class PlayerInputManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            playerEquipment.reloadWeapon();
+            
+            StartCoroutine(playerEquipment.reloadWeapon());
+
         }
     }
 

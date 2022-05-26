@@ -5,21 +5,31 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Data", menuName = "Items/New Weapon", order = 1)]
 public class Weapon : Item
 {
+    [Header("Damage")]
     public int minDamage;
     public int maxDamage;
+    public DamageTypes damageType;
+    [Header("Clip")]
     public int currentClip;
     public int clipSize;
-    public float bulletSpeed;
 
+    [Header("Various")]
+    public GameObject bullet;
+    public AudioClip shootSFX;
+    public float bulletSpeed;
+    public float effectiveRange;
+
+    [Header("Aiming")]
     public float dispersion;
     public float aimDispersionAfterShot;
     public float fullAimTime;
-    
-    public float effectiveRange;
 
-    public DamageTypes damageType;
 
-    public AudioClip shootSFX;
+    [Header("Animations")]
+    public AnimationClip idleAnim;
+    public AnimationClip fireAnim;
+    public AnimationClip reloadAnim;
 
-    public GameObject bullet;
+
+
 }

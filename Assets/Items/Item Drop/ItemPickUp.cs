@@ -17,6 +17,7 @@ public class ItemPickUp : Interactable
             Debug.Log("Cannot spawn item pick up. No item assigned " + this);
             return;
         }
+        setText(item.itemName);
         if (item.gameObjectRepresentation)
         {
             Instantiate(item.gameObjectRepresentation, transform);
@@ -29,6 +30,11 @@ public class ItemPickUp : Interactable
     public void setItem(Item item)
     {
         this.item = item;
+        setText(item.itemName);
+    }
+
+    private void setText(string text)
+    {
         nameDisplay.text = item.itemName;
     }
 
@@ -39,7 +45,8 @@ public class ItemPickUp : Interactable
         {
             displayName = item.itemName;
         }
-        // Draw a yellow sphere at the transform's position
+        setText(displayName);
+
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 0.1f);
         Handles.Label(transform.position, "Pickup - " + displayName);
