@@ -21,7 +21,8 @@ public class CharacterAiming : MonoBehaviour
     {
         Weapon weapon = characterEquipment.firstWeapon;
         Vector3 origin = getBulletSpawnPos();
-        audioSource.PlayOneShot(weapon.shootSFX);
+        if(weapon.shootSFX)
+            audioSource.PlayOneShot(weapon.shootSFX);
         SpawnBullet(weapon, origin, target);
     }
 

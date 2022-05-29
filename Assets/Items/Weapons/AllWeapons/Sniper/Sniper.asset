@@ -18,7 +18,9 @@ MonoBehaviour:
   gameObjectRepresentation: {fileID: 119825953385095134, guid: dd6c06b7d2312fc45bce84ac90c07717, type: 3}
   minDamage: 100
   maxDamage: 100
-  damageType: 0
+  mode: 1
+  currRateOfFire: 0
+  rateOfFire: 4
   currentClip: 5
   clipSize: 5
   bullet: {fileID: 2462097982286106474, guid: 65256b8c4e81ab34781ccf4b9a470edf, type: 3}
@@ -28,6 +30,3 @@ MonoBehaviour:
   dispersion: 0.05
   aimDispersionAfterShot: 0.5
   fullAimTime: 3
-  idleAnim: {fileID: 7400000, guid: abbb5f8775e2eaf43a24572caefe8615, type: 2}
-  fireAnim: {fileID: 7400000, guid: 691b81a191119944285d330bd34e725e, type: 2}
-  reloadAnim: {fileID: 7400000, guid: f377994ce316ea4408f9ad5a7f2a4fe7, type: 2}

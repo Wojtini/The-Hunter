@@ -14,6 +14,6 @@ public class WorldUI : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        this.transform.LookAt(player);
+        //this.transform.LookAt(player);
     }
 }

@@ -10,28 +10,21 @@ public class Damagable : MonoBehaviour
 
     public int currArmor = 1;
     public int maxArmor = 1;
-    public ArmorTypes armorType = ArmorTypes.Kevlar;
 
 
-    public GameObject hitNotifaction;
+    public GameObject hitNotification;
 
     public Slider healthBar;
     public Slider armorBar;
-    public void damage(int damage, DamageTypes damageType)
+    public void damage(int damage)
     {
-        GameObject hitNotification = Instantiate(this.hitNotifaction);
-        hitNotification.transform.position = this.transform.position + Vector3.up;
-        hitNotifaction.GetComponent<DmgPupUp>().setText(damage.ToString());
+        damage = Mathf.Min(damage, currHealth);
+        currHealth -= damage;
+        spawnHitNotification(damage);
 
-        damage = dealDamageToArmor(damage, damageType);
-
-        if(damage != 0)
+        if (currHealth <= 0)
         {
-            dealDamageToHealth(damage, damageType);
-            if (currHealth <= 0)
-            {
-                Die();
-            }
+            Die();
         }
 
         if(!healthBar || !armorBar)
@@ -43,31 +36,11 @@ public class Damagable : MonoBehaviour
         armorBar.value = (float)currArmor / maxArmor;
     }
 
-    private int dealDamageToArmor(int damage, DamageTypes damageType)
+    private void spawnHitNotification(int damage)
     {
-        if (currArmor == 0)
-        {
-            return damage;
-        }
-        float modifier = TypesCalculator.getModifier(damageType, this.armorType);
-        damage = (int)(damage * modifier);
-        currArmor -= damage;
-        //za duzo zadalismy trzeba oddac reszte obrazen dalej
-        if(currArmor < 0)
-        {
-            int leftOutDamage = -currArmor;
-            currArmor = 0;
-            return leftOutDamage;
-        }
-        //armor ponad 0 dalej mozna bic
-        return 0;
-    }
-
-    private void dealDamageToHealth(int damage, DamageTypes damageType)
-    {
-        float modifier = TypesCalculator.getModifier(damageType, ArmorTypes.NoArmor);
-        damage = (int)(damage * modifier);
-        currHealth -= damage;
+        GameObject hitNotification = Instantiate(this.hitNotification);
+        hitNotification.transform.position = this.transform.position + Vector3.up;
+        hitNotification.GetComponent<DmgPupUp>().setText(damage.ToString());
     }
 
     public void heal(int amount)

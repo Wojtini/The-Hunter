@@ -15,6 +15,15 @@ public class CharacterEquipment : MonoBehaviour
             firstWeapon = Instantiate(firstWeapon);
         if(secondWeapon)
             secondWeapon = Instantiate(secondWeapon);
+        UIManager.instance.UpdateWeaponPanel(firstWeapon, secondWeapon);
+    }
+
+    virtual protected void Update()
+    {
+        if(firstWeapon.currRateOfFire > 0)
+        {
+            firstWeapon.currRateOfFire -= Time.deltaTime;
+        }
     }
     virtual public void SwapWeapons()
     {
@@ -29,8 +38,6 @@ public class CharacterEquipment : MonoBehaviour
     {
         weaponAnimator.SetTrigger(trigger);
         float time = weaponAnimator.GetCurrentAnimatorStateInfo(0).length;
-        //Debug.Log(weaponAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        //Debug.Log(weaponAnimator.GetCurrentAnimatorStateInfo(0).length);
         return time;
     }
 
@@ -44,6 +51,7 @@ public class CharacterEquipment : MonoBehaviour
         {
             Debug.Log("Reloaded");
             firstWeapon.currentClip = firstWeapon.clipSize;
+            PlayerEvents.triggerOnReload();
         }
         else
         {

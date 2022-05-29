@@ -49,15 +49,29 @@ public class PlayerInputManager : MonoBehaviour
 
     void Shooting()
     {
-        if (Input.GetButtonDown("Fire1"))
+        switch (playerEquipment.firstWeapon.mode)
         {
-            playerAiming.Shoot(playerEquipment.firstWeapon);
+            case WeaponMode.Automatic:
+                if (Input.GetButton("Fire1"))
+                {
+                    playerAiming.Shoot(playerEquipment.firstWeapon);
+                }
+                break;
+            case WeaponMode.SingleAction:
+            case WeaponMode.SemiAutomatic:
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    playerAiming.Shoot(playerEquipment.firstWeapon);
+                }
+                break;
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            
             StartCoroutine(playerEquipment.reloadWeapon());
-
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            playerEquipment.SwapWeapons();
         }
     }
 
@@ -67,7 +81,7 @@ public class PlayerInputManager : MonoBehaviour
         {
             canLookAround = !canLookAround;
             canMove = !canMove;
-            InventoryUI.instance.ToggleInventory();
+            //  InventoryUI.instance.ToggleInventory();
             
             if (canLookAround)
                 Cursor.lockState = CursorLockMode.Locked;

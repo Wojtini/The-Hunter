@@ -17,13 +17,13 @@ public class Inventory : MonoBehaviour
     public void addItem(Item item)
     {
         items.Add(item);
-        InventoryUI.instance.UpdateInventoryView();
+        //InventoryUI.instance.UpdateInventoryView();
     }
 
     public void removeItem(Item item)
     {
         items.Remove(item);
-        InventoryUI.instance.UpdateInventoryView();
+        //InventoryUI.instance.UpdateInventoryView();
     }
 
     public List<Item> getAllItems()
@@ -34,7 +34,7 @@ public class Inventory : MonoBehaviour
     public void dropItem(Item item)
     {
         items.Remove(item);
-        InventoryUI.instance.UpdateInventoryView();
+        //InventoryUI.instance.UpdateInventoryView();
         GameObject go = Instantiate(ItemPickUpPrefab);
         go.GetComponent<ItemPickUp>().setItem(item);
         go.transform.position = transform.position + transform.forward;

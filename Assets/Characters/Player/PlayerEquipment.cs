@@ -8,27 +8,24 @@ public class PlayerEquipment : CharacterEquipment
     public static PlayerEquipment instance;
     public GameObject weaponPivot;
     private PlayerAiming playerAiming;
+    public bool constantUpdate = false;
+
 
     override protected void Start()
     {
         playerAiming = GetComponent<PlayerAiming>();
         instance = this;
         refreshWeaponModel();
+        PlayerEvents.onWeaponSwap += refreshWeaponModel;
         base.Start();
-    }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            SwapWeapons();
-        }
     }
 
     override public void SwapWeapons()
     {
         base.SwapWeapons();
-        playerAiming.weaponSwapped();
-        refreshWeaponModel();
+        PlayerEvents.triggerOnWeaponSwap();
+
+
     }
 
     private void refreshWeaponModel()
@@ -43,6 +40,8 @@ public class PlayerEquipment : CharacterEquipment
 
     void OnDrawGizmos()
     {
+        if (!constantUpdate)
+            return;
         for(int i=0;i< weaponPivot.transform.childCount; i++)
         {
             DestroyImmediate(weaponPivot.transform.GetChild(i).gameObject);

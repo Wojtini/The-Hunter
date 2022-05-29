@@ -11,18 +11,32 @@ public class PlayerAiming : CharacterAiming
     public float weaponSwapPenalty = 1f;
     private const float WORSENING_MODIFIER = 1.1f; // To make worsening aim faster
     public Camera cam;
+    public Transform aimTransform;
 
+    Vector3 camMiddle;
+    Vector3 forwardPoint;
     // Update is called once per frame
     override public void Start()
     {
         base.Start();
         cam = this.GetComponentInChildren<Camera>();
+
+        PlayerEvents.onWeaponSwap += weaponSwapped;
     }
     void Update()
     {
-        reduceAimSize(Time.deltaTime);
+        camMiddle = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+        forwardPoint = camMiddle + Camera.main.transform.forward * characterEquipment.firstWeapon.effectiveRange;
 
-        
+        aimTransform.position = forwardPoint;
+        aimTransform.LookAt(this.gameObject.transform);
+
+        reduceAimSize(Time.deltaTime);
+        Vector3 p = forwardPoint + aimTransform.transform.up * dispersion;
+        //D
+        Debug.DrawRay(camMiddle, p - camMiddle, Color.black);
+        Crosshair.instance.drawCrosshairFromWorldPoint(p);
+        drawDebugLines();
     }
 
     internal void weaponSwapped()
@@ -37,60 +51,83 @@ public class PlayerAiming : CharacterAiming
         Vector2 modifiers = getDispersionModifiers();
 
         float distDispersion = weaponDispersion + modifiers.x; // minimum that can be achieved with modifiers
+        float thirdsDispersion = dispersion / 3;
+        float perSecond = thirdsDispersion / aimTime;
+        if (dispersion < 0)
+            dispersion = 0;
 
-        dispersion = Mathf.Clamp(dispersion, 0f, 1f);
         if(dispersion < distDispersion)
         {
-            dispersion = Mathf.MoveTowards(dispersion, distDispersion, 1 / WORSENING_MODIFIER * Time.deltaTime);
+            dispersion = Mathf.MoveTowards(dispersion, distDispersion, perSecond * Time.deltaTime);
         }
         else
         {
-            dispersion = Mathf.MoveTowards(dispersion, distDispersion, 1 / aimTime * Time.deltaTime);
+            dispersion = Mathf.MoveTowards(dispersion, distDispersion, perSecond * Time.deltaTime);
         }
 
 
         float currAimRadius = Mathf.Lerp(this.minimumDispersionRadius, this.maximumDispersionRadius, dispersion);
-        Crosshair.instance.setCurrentRadius(currAimRadius);
     }
 
     public void Shoot(Weapon weapon)
     {
-        if (characterEquipment.firstWeapon.currentClip <= 0)
+        if (weapon.currentClip <= 0)
             return;
-        if (characterEquipment.isInAnimState("Reload"))
+        if (characterEquipment.isInAnimState("Reload") || characterEquipment.isInAnimState("Pullout"))
+            return;
+        if (weapon.currRateOfFire > 0)
             return;
         characterEquipment.setAnimationTrigger("Fire");
-        characterEquipment.firstWeapon.currentClip -= 1;
-        Vector3 target = CalculateTarget(weapon.effectiveRange);
-        dispersion += characterEquipment.firstWeapon.aimDispersionAfterShot;
+
+        Vector3 target = CalculateTarget(weapon.effectiveRange, dispersion);
+
+        weapon.ShootGun();
+        dispersion += weapon.aimDispersionAfterShot;
+
+        PlayerEvents.triggerOnFire();
+
+        //Spawning bullet
         Shoot(target);
     }
 
     public override Vector3 getBulletSpawnPos()
     {
+        if (bulletSpawnPos)
+        {
+            return bulletSpawnPos.transform.position;
+        }
+        Debug.Log("No spawn bullet point");
         return Camera.main.transform.position;
     }
 
-    private Vector3 CalculateTarget(float effectiveRange)
+    private void drawDebugLines()
     {
+        Debug.DrawRay(camMiddle, forwardPoint - camMiddle, Color.green);
+        Debug.DrawRay(forwardPoint, aimTransform.transform.up * dispersion, Color.green);
+        Debug.DrawRay(forwardPoint, -aimTransform.transform.up * dispersion, Color.green);
+        Debug.DrawRay(forwardPoint, aimTransform.transform.right * dispersion, Color.green);
+        Debug.DrawRay(forwardPoint, -aimTransform.transform.right * dispersion, Color.green);
+    }
+    private Vector3 CalculateTarget(float effectiveRange, float dispersion)
+    {
+        Debug.DrawRay(camMiddle, forwardPoint - camMiddle, Color.blue, 10f, true);
+        Debug.DrawRay(forwardPoint, aimTransform.transform.up * dispersion, Color.blue, 10f, true);
+        Debug.DrawRay(forwardPoint, -aimTransform.transform.up * dispersion, Color.blue, 10f, true);
+        Debug.DrawRay(forwardPoint, aimTransform.transform.right * dispersion, Color.blue, 10f, true);
+        Debug.DrawRay(forwardPoint, -aimTransform.transform.right * dispersion, Color.blue, 10f, true);
 
-        Vector3 camMiddle = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+        Vector2 rand = UnityEngine.Random.insideUnitCircle * dispersion;
+        Vector3 x = aimTransform.transform.up * rand.y;
+        Vector3 y = aimTransform.transform.right * rand.x;
 
-        Ray randomPoint = shootRandomiser.instance.getRandomShoot();
-        Vector3 randomPointVec = randomPoint.origin;
-        Debug.DrawRay(camMiddle, cam.transform.forward * 30, Color.green, 10f, true);
+        Debug.DrawRay(forwardPoint, x+y, Color.red, 10f, true);
 
-        Debug.DrawRay(randomPoint.origin, randomPoint.direction * effectiveRange, Color.red, 10f, true);
-
-        Vector3 randomPointTarget = (randomPoint.direction) * effectiveRange + randomPoint.origin;
-
-        return randomPointTarget;
+        return forwardPoint + x + y;
     }
 
     override public GameObject SpawnBullet(Weapon weapon, Vector3 origin, Vector3 target)
     {
         GameObject go = base.SpawnBullet(weapon, origin, target);
-        go.GetComponent<Bullet>().toggleLaser(false);
 
         return go;
     }

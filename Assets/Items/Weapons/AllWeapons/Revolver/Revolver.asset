@@ -16,15 +16,17 @@ MonoBehaviour:
   description: 
   logo: {fileID: 0}
   gameObjectRepresentation: {fileID: 494234399010850419, guid: 77e7661017a0b2c4ca2c9969b4ca12e9, type: 3}
-  minDamage: 0
-  maxDamage: 0
+  minDamage: 2
+  maxDamage: 5
+  mode: 0
+  currRateOfFire: 0
+  rateOfFire: 1
   currentClip: 5
   clipSize: 5
-  bulletSpeed: 150
-  dispersion: 0
-  aimDispersionAfterShot: 0.2
-  fullAimTime: 1.2
-  effectiveRange: 100
-  damageType: 0
-  shootSFX: {fileID: 8300000, guid: a1580e181876bed46a6839ab6337d718, type: 3}
   bullet: {fileID: 2462097982286106474, guid: 65256b8c4e81ab34781ccf4b9a470edf, type: 3}
+  shootSFX: {fileID: 8300000, guid: a1580e181876bed46a6839ab6337d718, type: 3}
+  bulletSpeed: 150
+  effectiveRange: 10
+  dispersion: 2.5
+  aimDispersionAfterShot: 1
+  fullAimTime: 2.2

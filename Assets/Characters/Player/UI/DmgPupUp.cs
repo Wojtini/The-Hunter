@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class DmgPupUp : WorldUI
 {
     public Text text;
+    private float constSize = 0.001f;
     public float lifetime = 3f;
     public float speed = 10f;
 
     public void setText(string text)
     {
-        Debug.Log(text);
         this.text.text = text;
     }
 
@@ -24,5 +24,10 @@ public class DmgPupUp : WorldUI
             Destroy(this.gameObject);
         }
         this.transform.position += Vector3.up * speed * Time.deltaTime;
+
+        float distance = (Camera.main.transform.position - transform.position).magnitude;
+        float size = distance * constSize * Camera.main.fieldOfView;
+        transform.localScale = Vector3.one * size;
+        transform.forward = transform.position - Camera.main.transform.position;
     }
 }

@@ -8,7 +8,12 @@ public class Weapon : Item
     [Header("Damage")]
     public int minDamage;
     public int maxDamage;
-    public DamageTypes damageType;
+
+    [Header("Weapon Mode")]
+    public WeaponMode mode;
+    public float currRateOfFire;
+    public float rateOfFire;
+
     [Header("Clip")]
     public int currentClip;
     public int clipSize;
@@ -24,12 +29,9 @@ public class Weapon : Item
     public float aimDispersionAfterShot;
     public float fullAimTime;
 
-
-    [Header("Animations")]
-    public AnimationClip idleAnim;
-    public AnimationClip fireAnim;
-    public AnimationClip reloadAnim;
-
-
-
+    public void ShootGun() 
+    {
+        currentClip -= 1;
+        currRateOfFire = rateOfFire;
+    }
 }

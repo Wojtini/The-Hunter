@@ -1,51 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Bullet : MonoBehaviour
 {
     public Vector3 destination;
     public float speed = 60;
     public int damage = 1;
-    public DamageTypes damageType;
-    private LineRenderer lineRenderer;
 
     public float lifetime = 15f;
 
     public GameObject pS;
-    private Vector3[] destinations = new Vector3[2];
     public LayerMask IgnoreMe;
 
     public AudioClip hitSfx;
     public GameObject audioSource;
-    void Awake()
-    {
-        lineRenderer = GetComponent<LineRenderer>();
 
-    }
-    void Start()
+    private Vector3 previousPosition;
+    private void Start()
     {
-        
+        previousPosition = this.transform.position;
     }
-    // Update is called once per frame
     void Update()
     {
         this.transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
-        destinations[0] = this.transform.position;
-
+        //Check if can raycast from previous position into current one
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ~IgnoreMe))
+        if (Physics.Raycast(previousPosition, transform.position - previousPosition, out hit, Vector3.Distance(transform.position, previousPosition)))
         {
-            destinations[1] = hit.point;
-            //Debug.Log(hit.transform.gameObject);
+            hitObject(hit.transform.gameObject);
         }
-
-
-        if (lineRenderer.enabled)
-        {
-            lineRenderer.SetPositions(destinations);
-        }
+        previousPosition = this.transform.position;
 
         lifetime -= Time.deltaTime;
         if(lifetime < 0)
@@ -58,25 +44,23 @@ public class Bullet : MonoBehaviour
     {
         transform.LookAt(newDestination);
 
-        destinations[1] = newDestination;
     }
 
     public void setStatistics(Weapon weapon)
     {
         this.speed = weapon.bulletSpeed;
         this.damage = Random.Range(weapon.minDamage, weapon.maxDamage);
-        this.damageType = weapon.damageType;
     }
 
-    void OnTriggerEnter(Collider collision)
+    void hitObject(GameObject go)
     {
         SpawnHitProjectile();
         SpawnAudioSource();
 
-        Damagable hit = collision.gameObject.GetComponent<Damagable>();
+        Damagable hit = go.gameObject.GetComponent<Damagable>();
         if (hit)
         {
-            hit.damage(this.damage, this.damageType);
+            hit.damage(this.damage);
         }
 
         Destroy(this.gameObject);
@@ -95,12 +79,7 @@ public class Bullet : MonoBehaviour
         GameObject a = Instantiate(pS);
         a.transform.position = this.transform.position;
         a.transform.rotation = this.transform.rotation;
-        a.GetComponent<ParticleSystem>().Play();
+        a.GetComponentInChildren<VisualEffect>().Play();
         Destroy(a, 2f);
-    }
-
-    public void toggleLaser(bool toggle)
-    {
-        lineRenderer.enabled = toggle;
     }
 }
